@@ -2,8 +2,13 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary.js");
 const moviesService = require("./movies.service.js");
 
 async function showReviews(req, res) {
-  const review = await moviesService.showReviews(req.params.movieId);
-  res.json({ data: review });
+  try {
+    const review = await moviesService.showReviews(req.params.movieId);
+    console.log(review);
+    res.json({ data: review });
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 async function showingAtTheater(req, res) {
@@ -26,11 +31,10 @@ async function read(req, res) {
 
 async function list(req, res) {
   const showing = req.query.is_showing;
-  if (!(showing === true)) {
+  if (!showing) {
     const data = await moviesService.list();
     res.json({ data });
-  }
-  if (showing === true) {
+  } else {
     const data = await moviesService.isShowing();
     res.json({ data });
   }

@@ -14,7 +14,11 @@ function update(updatedReview) {
     .select("*")
     .where({ review_id: updatedReview.review_id })
     .update(updatedReview, "*")
-    .then(addCritic);
+    .then((data) => {
+      // console.log("addCritic");
+      const addCData = addCritic(data);
+      return { critic: addCData };
+    });
 }
 
 function read(reviewId) {
@@ -27,5 +31,6 @@ function destroy(reviewId) {
 
 module.exports = {
   read,
+  update,
   delete: destroy,
 };

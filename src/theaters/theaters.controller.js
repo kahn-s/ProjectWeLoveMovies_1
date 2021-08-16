@@ -3,7 +3,6 @@ const theatersService = require("./theaters.service.js");
 
 async function list(req, res) {
   const data = await theatersService.list();
-  console.log(data);
   res.json({ data: data });
 }
 

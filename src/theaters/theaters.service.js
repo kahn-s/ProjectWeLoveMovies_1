@@ -9,14 +9,19 @@ const reduceMovies = reduceProperties("theater_id", {
   description: ["movies", null, "description"],
   image_url: ["movies", null, "image_url"],
   created_at: ["movies", null, "created_at"],
+  updated_at: ["movies", null, "updated_at"],
 });
 
 function list() {
   return knex("theaters as t")
-    .select("t.*", "m.*")
+    .select()
     .join("movies_theaters as mt", "t.theater_id", "mt.theater_id")
     .join("movies as m", "mt.movie_id", "m.movie_id")
-    .then(reduceMovies);
+    .then(reduceMovies)
+    .then((data) => {
+      console.log("theaters", data);
+      return data;
+    });
 }
 module.exports = {
   list,
