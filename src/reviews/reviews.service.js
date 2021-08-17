@@ -1,5 +1,6 @@
 const knex = require("../db/connection");
 const mapProperties = require("../utils/map-properties");
+//const reduceProperties = require("../utils/reduce-properties");
 
 const addCritic = mapProperties({
   critic_id: "critic.critic_id",
@@ -9,16 +10,23 @@ const addCritic = mapProperties({
   critic_updated_at: "critic.critic.updated_at",
 });
 
+/*const reduceCritic = reduceProperties("critic_id", {
+  critic_id: ["critic", null, "critic_id"],
+  preferred_name: ["critic", null, "preferred_name"],
+  surname: ["critic", null, "surname"],
+  organization_name: ["critic", null, "organization_name"],
+  created_at: ["critic", null, "created_at"],
+  updated_at: ["critic", null, "updated_at"],
+});*/
+
 function update(updatedReview) {
-  return knex("reviews")
+  return knex("reviews as r")
+    .join("critics as c", "c.critic_id", "r.critic_id")
     .select("*")
     .where({ review_id: updatedReview.review_id })
     .update(updatedReview, "*")
-    .then((data) => {
-      // console.log("addCritic");
-      const addCData = addCritic(data);
-      return { critic: addCData };
-    });
+    .then(addCritic);
+  //.then(reduceCritic);
 }
 
 function read(reviewId) {

@@ -14,12 +14,16 @@ async function read(req, res) {
 }
 
 async function update(req, res) {
-  const updatedReview = {
-    ...req.body.data,
-    review_id: res.locals.review.review_id,
-  };
-  const data = await reviewsService.update(updatedReview);
-  res.json({ data: data[0] });
+  try {
+    const updatedReview = {
+      ...req.body.data,
+      review_id: res.locals.review.review_id,
+    };
+    const data = await reviewsService.update(updatedReview);
+    res.json({ data: data[0] });
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 async function destroy(req, res) {

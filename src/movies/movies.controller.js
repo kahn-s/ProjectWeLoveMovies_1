@@ -2,18 +2,16 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary.js");
 const moviesService = require("./movies.service.js");
 
 async function showReviews(req, res) {
-  try {
-    const review = await moviesService.showReviews(req.params.movieId);
-    console.log(review);
-    res.json({ data: review });
-  } catch (err) {
-    console.log(err);
-  }
+  const reviews = await moviesService.showReviews(req.params.movieId);
+  const newArray = Object.values(reviews);
+  const resp = [...newArray, (critic = critic[0])];
+  console.log("RESP", resp);
+  res.json({ data: newArray });
 }
 
 async function showingAtTheater(req, res) {
-  const theater = await moviesService.showingAtTheater(req.params.movieId);
-  res.json({ data: theater });
+  const theaters = await moviesService.showingAtTheater(req.params.movieId);
+  res.json({ data: theaters });
 }
 
 async function movieExists(req, res, next) {
@@ -31,12 +29,14 @@ async function read(req, res) {
 
 async function list(req, res) {
   const showing = req.query.is_showing;
-  if (!showing) {
-    const data = await moviesService.list();
-    res.json({ data });
-  } else {
+  if (showing) {
+    console.log("SHOWING");
     const data = await moviesService.isShowing();
-    res.json({ data });
+    console.log("SHOWING DATA");
+    res.json({ data: data });
+  } else {
+    const data = await moviesService.list();
+    res.json({ data: data });
   }
 }
 

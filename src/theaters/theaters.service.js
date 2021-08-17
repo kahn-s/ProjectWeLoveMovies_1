@@ -19,7 +19,6 @@ function list() {
     .join("movies as m", "mt.movie_id", "m.movie_id")
     .then(reduceMovies)
     .then((data) => {
-      console.log("theaters", data);
       return data;
     });
 }
