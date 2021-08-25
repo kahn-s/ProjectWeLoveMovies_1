@@ -19,8 +19,27 @@ async function update(req, res) {
       ...req.body.data,
       review_id: res.locals.review.review_id,
     };
-    const data = await reviewsService.update(updatedReview);
-    res.json({ data: data[0] });
+    await reviewsService.update(updatedReview);
+
+    const showUpdate = await reviewsService.showUpdate(updatedReview);
+
+    const review = showUpdate[0];
+    let newReview = {};
+
+    if (showUpdate.length > 0) {
+      newReview = {
+        content: review.content,
+        created_at: review.created_at,
+        critic: review.critic[0],
+        critic_id: review.critic_id,
+        movie_id: review.movie_id,
+        review_id: review.review_id,
+        score: review.score,
+        updated_at: review.updated_at,
+      };
+      console.log("newReview", newReview);
+    }
+    res.json({ data: newReview });
   } catch (err) {
     console.log(err);
   }

@@ -28,10 +28,16 @@ function showingAtTheater(movieId) {
 
 function isShowing() {
   return knex("movies as m")
-    .select("m.*")
-    .distinctOn("m.movie_id")
+    .select(
+      "m.movie_id",
+      "m.title",
+      "m.runtime_in_minutes",
+      "m.description",
+      "m.image_url"
+    )
     .join("movies_theaters as mt", "m.movie_id", "mt.movie_id")
-    .where({ is_showing: true });
+    .where({ is_showing: true })
+    .groupBy("m.movie_id");
 }
 
 function read(movieId) {
